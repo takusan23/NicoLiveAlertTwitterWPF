@@ -1,0 +1,22 @@
+﻿<Window x:Class="NicoLiveAlertTwitterWPF.AutoAdmission.AutoAdmissionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NicoLiveAlertTwitterWPF.AutoAdmission"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="AutoAdmissionDialog" Height="200" Width="400">
+    <Grid>
+        <StackPanel Margin="5">
+            <TextBlock Text="予約枠自動入場" FontSize="20"/>
+            <StackPanel Margin="5">
+                <TextBlock  Text="番組ID"/>
+                <TextBox x:Name="AutoAdmissionAddDialogProgramID"/>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <Button x:Name="AutoAdmissionAddDialogButton" Click="AutoAdmissionAddDialogButton_Click" Foreground="#ffffff" Content="登録（必要な情報は自動で取得します。）"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

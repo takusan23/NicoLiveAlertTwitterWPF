@@ -1,0 +1,284 @@
+﻿<Window x:Class="NicoLiveAlertTwitterWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NicoLiveAlertTwitterWPF"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        mc:Ignorable="d"
+        MinHeight="300"
+        Icon="Icon/Icon.ico"
+        MinWidth="400"
+        Title="ニコ生アラート（青鳥WPF）" Height="450" Width="800">
+
+    <DockPanel>
+
+
+        <tb:TaskbarIcon x:Name="NotifyIcon"
+                IconSource="Icon/Icon.ico"
+                ToolTipText="ニコ生アラート（青鳥WPF）通知" />
+
+        <StackPanel DockPanel.Dock="Left" Background="WhiteSmoke" MinWidth="200">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock x:Name="FilterStreamTextBlock" Text="リアルタイム更新を開始　"/>
+                    <ToggleButton x:Name="FilterStreamSwitch" Click="FilterStreamSwitch_Click" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="False"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <TextBlock x:Name="AutoAddAdmissionTextBlock" Text="予約枠自動登録開始　"/>
+                    <ToggleButton x:Name="AutoAddAdmissionSwitch" Click="AutoAddAdmissionSwitch_Click" Style="{StaticResource MaterialDesignSwitchToggleButton}" IsChecked="False"/>
+                </StackPanel>
+            </StackPanel>
+            <ListView x:Name="SideMenuListView">
+                <ListViewItem Tag="NavItemHome" Visibility="Collapsed" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Home"/>
+                        <TextBlock Text="ホーム"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="NavItemHistory" Tag="NavItemHistory" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="History"/>
+                        <TextBlock Text="アラート履歴"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemLiveStreamerTwitter" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountDetails"/>
+                        <TextBlock Text="生主アカウント"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemAutoAdmission" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="DoorOpen"/>
+                        <TextBlock Text="予約枠自動入場リスト"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemFollowProgram" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountCheck"/>
+                        <TextBlock Text="フォロー中の番組"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemNicorepo" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="AccountCheck"/>
+                        <TextBlock Text="ニコレポ"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemAutoAddAdmission" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Robot"/>
+                        <TextBlock Text="予約枠自動入場自動登録"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemLogin" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Register"/>
+                        <TextBlock Text="ログイン"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemSetting" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="SettingsApplications"/>
+                        <TextBlock Text="設定"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem Tag="NavItemAppInfo" PreviewMouseDown="ListViewItem_PreviewMouseLeftButtonDown">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="InfoCircleOutline"/>
+                        <TextBlock Text="このアプリについて"></TextBlock>
+                    </StackPanel>
+                </ListViewItem>
+            </ListView>
+        </StackPanel>
+        <DockPanel>
+
+            <Grid Margin="5">
+                <Grid Visibility="Collapsed" x:Name="HomePanel">
+                    <StackPanel  Orientation="Vertical" Margin="10">
+                        <TextBlock x:Name="home_twitter_stream_textblock" Text="ニコ生アラート状態：接続していません。" FontSize="25"  Padding="10,20,10,10"/>
+                        <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" x:Name="home_twitter_stream_switch" Tag="home_twitter_stream_switch" Content="接続する" FontSize="20" Margin="10"/>
+                        <TextBlock x:Name="home_auto_admission_textblock" Text="予約枠自動登録自動入場状態：停止中です。" FontSize="25" Padding="10,20,10,10" />
+                        <CheckBox VerticalAlignment="Center" VerticalContentAlignment="Center" x:Name="home_auto_admission_switch" Tag="home_auto_admission_switch" Content="有効にする" FontSize="20" Margin="10" />
+                    </StackPanel>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="LiveStreamerAccountPanel">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <TextBlock Text="アカウント追加" FontSize="20"></TextBlock>
+                            <StackPanel Margin="2" Orientation="Horizontal">
+                                <TextBox x:Name="LiveStreamerAddAccountTextBox" Width="300" Text="@"></TextBox>
+                                <Button x:Name="LiveStreamerAddButton" Content="追加" Click="LiveStreamerAddButton_Click" Foreground="#ffffff"></Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <Grid>
+                            <ListView x:Name="LiveStreamerAccountListView" Height="Auto">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock x:Name="account_listview_textblock" Text="{Binding Name}" FontSize="20"/>
+                                            <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="TwitterAccountDeleteButton" Tag="{Binding Pos}" Click="TwitterAccountDeleteButton_Click">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="削除"></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="AutoAdmissionPanel">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <Button Style="{StaticResource MaterialDesignRaisedDarkButton}" Foreground="#ffffff" HorizontalAlignment="Left" Content="予約枠自動入場追加" Name="AutoAdmissionAddButton" Click="AutoAdmissionAddButton_Click"/>
+                        </StackPanel>
+                        <Grid>
+                            <ListView x:Name="AutoAdmissionListView" Height="Auto">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock TextWrapping="Wrap" x:Name="nico_fav_listview_textblock" Text="{Binding Name}" FontSize="20" FontWeight="Bold"/>
+                                            <TextBlock x:Name="nico_fav_listview_begin_textblock" Text="{Binding dateTime}" FontSize="20"/>
+                                            <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="AutoAdmissionDeleteButton" Content="予約枠自動入場削除" Tag="{Binding Pos}" Click="AutoAdmissionDeleteButton_Click"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="FavouriteProgramPanel">
+                    <ListView x:Name="NicoFavListView" ItemsSource="{Binding list}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold" TextWrapping="Wrap"  x:Name="nico_fav_listview_textblock"  Text="{Binding Name}" FontSize="20"/>
+                                    <TextBlock x:Name="nico_fav_time_listview_textblock"  Text="{Binding dateTime}" FontSize="20"/>
+                                    <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoFavAddAutoAdmissionButton" Content="登録" Tag="{Binding Pos}" Click="NicoFavAddAutoAdmissionButton_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="NicoRepoPanel">
+                    <ListView x:Name="NicoRepoListView" ItemsSource="{Binding list}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock TextWrapping="Wrap" x:Name="nico_repo_listview_textblock" Text="{Binding Name}" FontSize="20"/>
+                                    <TextBlock x:Name="nico_repo_time_listview_textblock"  Text="{Binding dateTime}" FontSize="20"/>
+                                    <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoRepoAddAdmissionButton" Content="登録" Tag="{Binding Pos}" Click="NicoRepoAddAdmissionButton_Click"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="LoginPanel">
+                    <materialDesign:DialogHost x:Name="TwitterPINDialog">
+                        <materialDesign:DialogHost.DialogContent>
+                            <StackPanel>
+                                <TextBlock Text="Twitter認証のPINコード入力"></TextBlock>
+                            </StackPanel>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
+                    <StackPanel Orientation="Vertical" >
+                        <StackPanel Orientation="Vertical" Margin="10,20,10,10">
+                            <TextBlock Text="Twitterログインはここから" FontSize="30"></TextBlock>
+                            <Button HorizontalAlignment="Left"  Foreground="#ffffff" x:Name="TwitterLoginButton" Content="Twitterログイン" FontSize="20" Click="TwitterLoginButton_Click" Margin="10"/>
+                            <Button HorizontalAlignment="Left" Foreground="#ffffff" Content="Twitterログイン（Twitter開発者向け）" FontSize="20" x:Name="TwitterLoginConsumerKeyButton" Click="TwitterLoginConsumerKeyButton_Click" Margin="10"></Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="10,20,10,10">
+                            <TextBlock Text="niconicoログインはここから" FontSize="30"></TextBlock>
+                            <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoLoginButton" Content="niconicoログイン" FontSize="20" Click="NicoLoginButton_Click" Margin="10"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <Grid Visibility="Collapsed" x:Name="AutoAddAdmissionPanel">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top">
+                            <StackPanel Margin="5">
+                                <TextBlock Text="予約枠自動入場自動登録とは" FontSize="20"/>
+                                <TextBlock TextWrapping="Wrap" Text="予約枠自動入場の登録作業を自動化出来ます。利用するには予めコミュのIDを登録しておく必要があります。" FontSize="15"/>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <TextBlock Text="フォロー中、ニコレポへの定期アクセス間隔（分）"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="300" x:Name="AutoAddAdmissionTimeTextBox" Text="10" TextChanged="AutoAddAdmissionTime_TextChanged"/>
+                                    <Button Foreground="#ffffff" x:Name="AutoAddAdmissionTimeButton" Click="AutoAddAdmissionTimeButton_Click" Content="設定"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Margin="5">
+                                <TextBlock Text="追加するコミュニティID"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Width="300" x:Name="AutoAddAdmissionAddCommunity" Text="co"/>
+                                    <Button Foreground="#ffffff" x:Name="AutoAddAdmissionButton" Click="AutoAddAdmissionButton_Click" Content="追加"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                        <ListView x:Name="AutoAddAdmissionListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding ID}" FontSize="20"/>
+                                        <Button HorizontalAlignment="Left" Foreground="#ffffff" Content="削除" Tag="{Binding Pos}" x:Name="AutoAddAdmissionCommunityDelete" Click="AutoAddAdmissionCommunityDelete_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
+                <Grid x:Name="HistoryPanel" Visibility="Collapsed">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Margin="5">
+                            <Button Foreground="#ffffff" HorizontalAlignment="Left" Content="履歴全削除"/>
+                        </StackPanel>
+                        <ListView x:Name="HistoryListView">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5">
+                                        <TextBlock Text="{Binding Content}" FontSize="15"/>
+                                        <TextBlock Text="{Binding LiveId}"/>
+                                        <TextBlock Text="{Binding dateTime}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </DockPanel>
+                </Grid>
+                <Grid x:Name="SettingPanel" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="起動時の設定" FontSize="20"/>
+                        <StackPanel Margin="5">
+                            <CheckBox FontSize="15" Content="起動時にリアルタイム更新を始める。" x:Name="SettingLaunchStartFilterStreamCheck" Click="SettingCheckBoxClick"/>
+                            <CheckBox FontSize="15" Content="起動時に予約枠自動登録を始める。"  x:Name="SettingLaunchStartAutoAddAdmissionCheck" Click="SettingCheckBoxClick" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+                <Grid x:Name="AppInfoPanel" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="このアプリについて" FontSize="20"/>
+                        <StackPanel Margin="10">
+                            <TextBlock Text="ニコ生アラート（青鳥WPF）" FontSize="20"/>
+                            <TextBlock Text="1.0 2019/09/16" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock Text="何かあればどうぞ" FontSize="20"/>
+                            <StackPanel Margin="10" Orientation="Horizontal">
+                                <Button Margin="10" Name="AppInfoTwitterButton" Click="AppInfoButton_Click" Foreground="#ffffff" Content="Twitter"/>
+                                <Button Margin="10" Name="AppInfoMastodonButton" Click="AppInfoButton_Click"  Foreground="#ffffff" Content="Mastodon"/>
+                                <Button Margin="10" Name="AppInfoGitHubButton"  Click="AppInfoButton_Click" Foreground="#ffffff" Content="GitHub"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+        </DockPanel>
+    </DockPanel>
+
+</Window>

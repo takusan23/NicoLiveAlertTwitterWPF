@@ -1,0 +1,27 @@
+﻿<Window x:Class="NicoLiveAlertTwitterWPF.Twitter.TwitterConsumerKeyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NicoLiveAlertTwitterWPF.Twitter"
+        mc:Ignorable="d"
+        Margin="5"
+        Title="TwitterConsumerKeyDialog" Height="300" Width="300">
+    <Grid>
+        <StackPanel>
+            <TextBlock FontSize="20" Text="Twitterのコンシューマーキーを入力"/>
+            <TextBlock FontSize="15" Text="Twitterの開発者向けね。一般向けじゃない。"/>
+            <StackPanel Margin="5">
+                <TextBlock Text="コンシューマーキー"/>
+                <TextBox x:Name="TwitterConsumerKeyDialogBox"/>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <TextBlock Text="コンシューマーシークレット"/>
+                <TextBox x:Name="TwitterConsumerKeyDialogSecretBox"/>
+            </StackPanel>
+            <StackPanel Margin="5">
+                <Button Content="認証" x:Name="TwitterCOnsumerKeyDialogButton" Click="TwitterCOnsumerKeyDialogButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
