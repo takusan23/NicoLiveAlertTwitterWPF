@@ -374,7 +374,7 @@ namespace NicoLiveAlertTwitterWPF
 
             var twitterLink = "https://twitter.com/takusan__23";
             var mastodonLink = "https://best-friends.chat/@takusan_23";
-            var githubLink = "";
+            var githubLink = "https://github.com/takusan23/NicoLiveAlertTwitterWPF";
 
             var name = (sender as Button).Name;
             switch (name)
