@@ -23,6 +23,11 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
         //予約枠自動入場JSON
         List<AutoAdmissionJSON> autoAdmissionJSON;
 
+        //履歴機能
+        ProgramHistory.ProgramHistory programHistory = new ProgramHistory.ProgramHistory();
+
+
+
         MainWindow window;
 
         public void startAutoAdmission(MainWindow window)
@@ -94,6 +99,9 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     //通知出す
                     showNotification(name);
 
+                    //履歴追加
+                    programHistory.addHistory(liveId);
+
                     //開場したので配列から
                     autoAdmissionJSON.RemoveAt(index);
                     //保存
@@ -107,7 +115,7 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
         //通知
         private void showNotification(string value)
         {
-            window.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", value, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+            //window.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", value, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
         }
 
         //ブラウザ起動

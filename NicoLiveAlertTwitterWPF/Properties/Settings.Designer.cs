@@ -190,5 +190,41 @@ namespace NicoLiveAlertTwitterWPF.Properties {
                 this["setting_launch_start_autoaddadmission"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string setting_otherlive_url {
+            get {
+                return ((string)(this["setting_otherlive_url"]));
+            }
+            set {
+                this["setting_otherlive_url"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string setting_otherlive_client {
+            get {
+                return ((string)(this["setting_otherlive_client"]));
+            }
+            set {
+                this["setting_otherlive_client"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string setting_otherlive_mode {
+            get {
+                return ((string)(this["setting_otherlive_mode"]));
+            }
+            set {
+                this["setting_otherlive_mode"] = value;
+            }
+        }
     }
 }

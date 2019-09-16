@@ -13,12 +13,14 @@
         MinWidth="400"
         Title="ニコ生アラート（青鳥WPF）" Height="450" Width="800">
 
+    
     <DockPanel>
 
 
         <tb:TaskbarIcon x:Name="NotifyIcon"
-                IconSource="Icon/Icon.ico"
-                ToolTipText="ニコ生アラート（青鳥WPF）通知" />
+                IconSource="Icon/Icon.ico">
+            
+        </tb:TaskbarIcon>
 
         <StackPanel DockPanel.Dock="Left" Background="WhiteSmoke" MinWidth="200">
             <StackPanel>
@@ -189,12 +191,12 @@
                     <StackPanel Orientation="Vertical" >
                         <StackPanel Orientation="Vertical" Margin="10,20,10,10">
                             <TextBlock Text="Twitterログインはここから" FontSize="30"></TextBlock>
-                            <Button HorizontalAlignment="Left"  Foreground="#ffffff" x:Name="TwitterLoginButton" Content="Twitterログイン" FontSize="20" Click="TwitterLoginButton_Click" Margin="10"/>
-                            <Button HorizontalAlignment="Left" Foreground="#ffffff" Content="Twitterログイン（Twitter開発者向け）" FontSize="20" x:Name="TwitterLoginConsumerKeyButton" Click="TwitterLoginConsumerKeyButton_Click" Margin="10"></Button>
+                            <Button HorizontalAlignment="Left"  Foreground="#ffffff" x:Name="TwitterLoginButton" Content="Twitterログイン"  Click="TwitterLoginButton_Click" Margin="10"/>
+                            <Button HorizontalAlignment="Left" Foreground="#ffffff" Content="Twitterログイン（Twitter開発者向け）"  x:Name="TwitterLoginConsumerKeyButton" Click="TwitterLoginConsumerKeyButton_Click" Margin="10"></Button>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Margin="10,20,10,10">
                             <TextBlock Text="niconicoログインはここから" FontSize="30"></TextBlock>
-                            <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoLoginButton" Content="niconicoログイン" FontSize="20" Click="NicoLoginButton_Click" Margin="10"></Button>
+                            <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoLoginButton" Content="niconicoログイン" Click="NicoLoginButton_Click" Margin="10"></Button>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -235,12 +237,12 @@
                 <Grid x:Name="HistoryPanel" Visibility="Collapsed">
                     <DockPanel>
                         <StackPanel DockPanel.Dock="Top" Margin="5">
-                            <Button Foreground="#ffffff" HorizontalAlignment="Left" Content="履歴全削除"/>
+                            <Button Foreground="#ffffff" HorizontalAlignment="Left" Name="HistoryClearButton" Click="HistoryClearButton_Click" Content="履歴全削除"/>
                         </StackPanel>
                         <ListView x:Name="HistoryListView">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="5">
+                                    <StackPanel>
                                         <TextBlock Text="{Binding Content}" FontSize="15"/>
                                         <TextBlock Text="{Binding LiveId}"/>
                                         <TextBlock Text="{Binding dateTime}"/>
@@ -251,13 +253,60 @@
                     </DockPanel>
                 </Grid>
                 <Grid x:Name="SettingPanel" Visibility="Collapsed">
-                    <StackPanel>
-                        <TextBlock Text="起動時の設定" FontSize="20"/>
-                        <StackPanel Margin="5">
-                            <CheckBox FontSize="15" Content="起動時にリアルタイム更新を始める。" x:Name="SettingLaunchStartFilterStreamCheck" Click="SettingCheckBoxClick"/>
-                            <CheckBox FontSize="15" Content="起動時に予約枠自動登録を始める。"  x:Name="SettingLaunchStartAutoAddAdmissionCheck" Click="SettingCheckBoxClick" />
-                        </StackPanel>
-                    </StackPanel>
+                    <ScrollViewer>
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Text="起動時の設定" FontSize="20"/>
+                            <StackPanel DockPanel.Dock="Top" Margin="5">
+                                <CheckBox FontSize="15" Content="起動時にリアルタイム更新を始める。" x:Name="SettingLaunchStartFilterStreamCheck" Click="SettingCheckBoxClick"/>
+                                <CheckBox FontSize="15" Content="起動時に予約枠自動登録を始める。"  x:Name="SettingLaunchStartAutoAddAdmissionCheck" Click="SettingCheckBoxClick" />
+                            </StackPanel>
+
+                            <TextBlock DockPanel.Dock="Top" Text="他の配信サイトで利用" FontSize="20"/>
+                            <StackPanel DockPanel.Dock="Top" Margin="5">
+                                <CheckBox FontSize="15" Content="他の配信サイトでも自動入場する" x:Name="SettingOtherLiveSwitch" Click="SettingCheckBoxClick"/>
+                                <TextBlock FontSize="15" TextWrapping="Wrap" Text="この機能を利用すると他の配信サイトの番組開始ツイートを見つけることが出来ます。（生放送へのリンク（URL）がある場合）"/>
+                                <StackPanel Margin="5">
+                                    <TextBlock FontSize="15" TextWrapping="Wrap" Text="以下の配信サイトのURLは自動で入場する（自動でブラウザ開く）"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Width="300" x:Name="SettingOtherLiveURLTextBox" FontSize="15" />
+                                        <Button Foreground="#ffffff" Content="URL追加" Name="SettingOtherLiveURLAddButton" Click="SettingOtherLiveURLAddButton_Click"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <ListView x:Name="SettingOtherLiveURLListView" Height="100" DockPanel.Dock="Top" Margin="5,0,5,5">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding URL}" FontSize="15"/>
+                                            <Button x:Name="SettingOtherLiveURLDeleteButton" Tag="{Binding Pos}" Click="SettingOtherLiveURLDeleteButton_Click" Foreground="#ffffff" Content="削除" FontSize="10" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <StackPanel DockPanel.Dock="Top" Margin="5">
+                                <StackPanel Margin="5">
+                                    <TextBlock FontSize="15" TextWrapping="Wrap" Text="以下のTwitterのクライアントで投稿された場合は自動で入場する（自動でブラウザ開く）"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Width="300" x:Name="SettingOtherLiveClientTextBox" FontSize="15" />
+                                        <Button Foreground="#ffffff" Content="クライアント追加" Name="SettingOtherLiveClientAddButton" Click="SettingOtherLiveClientAddButton_Click"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <ListView x:Name="SettingOtherLiveClientListView" Height="100" DockPanel.Dock="Top" Margin="5,0,5,5">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Width="300" Text="{Binding Client}"  FontSize="15"/>
+                                            <Button x:Name="SettingOtherLiveClientDeleteButton" Tag="{Binding Pos}" Click="SettingOtherLiveClientDeleteButton_Click" Foreground="#ffffff" Content="削除" FontSize="10" HorizontalAlignment="Left"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                        </DockPanel>
+                    </ScrollViewer>
+
                 </Grid>
                 <Grid x:Name="AppInfoPanel" Visibility="Collapsed">
                     <StackPanel>

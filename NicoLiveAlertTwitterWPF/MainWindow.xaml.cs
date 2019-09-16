@@ -51,6 +51,12 @@ namespace NicoLiveAlertTwitterWPF
         //予約枠自動登録
         AutoAddAdmission autoAddAdmission = new AutoAddAdmission();
 
+        //履歴
+        ProgramHistory.ProgramHistory programHistory = new ProgramHistory.ProgramHistory();
+
+        //他の配信サイトでも自動入場
+        OtherLive.OtherLiveList otherLive = new OtherLive.OtherLiveList();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -89,6 +95,17 @@ namespace NicoLiveAlertTwitterWPF
 
             //予約枠自動入場が始まるか監視
             autoAdmission.startAutoAdmission(this);
+
+            //履歴機能
+            Console.WriteLine(Properties.Settings.Default.program_history);
+            programHistory.loadHisotry();
+            HistoryListView.ItemsSource = programHistory.list;
+
+            //他の配信サイトでも自動入場
+            otherLive.loadOtherLiveURL();
+            otherLive.loadOtherLiveClient();
+            SettingOtherLiveURLListView.ItemsSource = otherLive.urlListViewData;
+            SettingOtherLiveClientListView.ItemsSource = otherLive.clientListViewData;
 
             //設定読み込み
             loadSetting();
@@ -215,6 +232,7 @@ namespace NicoLiveAlertTwitterWPF
                 case "NavItemHistory":
                     //アラート履歴
                     pageList[7].Visibility = Visibility.Visible;
+                    programHistory.loadHisotry();
                     break;
                 case "NavItemSetting":
                     //設定
@@ -337,6 +355,9 @@ namespace NicoLiveAlertTwitterWPF
                 case "SettingLaunchStartAutoAddAdmissionCheck":
                     Properties.Settings.Default.setting_launch_start_autoaddadmission = check;
                     break;
+                case "SettingOtherLiveSwitch":
+                    Properties.Settings.Default.setting_otherlive_mode = check;
+                    break;
             }
             Properties.Settings.Default.Save();
         }
@@ -344,27 +365,36 @@ namespace NicoLiveAlertTwitterWPF
         private void loadSetting()
         {
             //設定読み込む
-            SettingLaunchStartFilterStreamCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_launch_start_filterstream);
-            SettingLaunchStartAutoAddAdmissionCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_launch_start_autoaddadmission);
-
-            //起動時にFilterStreamへ接続する
-            if (Boolean.Parse(Properties.Settings.Default.setting_launch_start_filterstream))
+            if (Properties.Settings.Default.setting_launch_start_filterstream != "")
             {
-                //接続
-                filterStream.connectFilterStream(this);
-                FilterStreamTextBlock.Text = "リアルタイム更新を利用中　";
-                FilterStreamSwitch.IsChecked = true;
+                SettingLaunchStartFilterStreamCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_launch_start_filterstream);
+                //起動時にFilterStreamへ接続する
+                if (Boolean.Parse(Properties.Settings.Default.setting_launch_start_filterstream))
+                {
+                    //接続
+                    filterStream.connectFilterStream(this);
+                    FilterStreamTextBlock.Text = "リアルタイム更新を利用中　";
+                    FilterStreamSwitch.IsChecked = true;
+                }
             }
-            //起動時に予約枠自動登録を利用する
-            if (Boolean.Parse(Properties.Settings.Default.setting_launch_start_autoaddadmission))
+            if (Properties.Settings.Default.setting_launch_start_autoaddadmission != "")
             {
-                //開始。
-                autoAddAdmission.timerFollowAutoAddAdmission();
-                autoAddAdmission.timerNicorepoAutoAddAdmission();
-                autoAddAdmission.nicorepoTimer.Start();
-                autoAddAdmission.followTimer.Start();
-                AutoAddAdmissionTextBlock.Text = "予約枠自動登録利用中　";
-                AutoAddAdmissionSwitch.IsChecked = true;
+                SettingLaunchStartAutoAddAdmissionCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_launch_start_autoaddadmission);
+                //起動時に予約枠自動登録を利用する
+                if (Boolean.Parse(Properties.Settings.Default.setting_launch_start_autoaddadmission))
+                {
+                    //開始。
+                    autoAddAdmission.timerFollowAutoAddAdmission();
+                    autoAddAdmission.timerNicorepoAutoAddAdmission();
+                    autoAddAdmission.nicorepoTimer.Start();
+                    autoAddAdmission.followTimer.Start();
+                    AutoAddAdmissionTextBlock.Text = "予約枠自動登録利用中　";
+                    AutoAddAdmissionSwitch.IsChecked = true;
+                }
+            }
+            if (Properties.Settings.Default.setting_otherlive_mode != "")
+            {
+                SettingOtherLiveSwitch.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_otherlive_mode);
             }
         }
 
@@ -391,6 +421,36 @@ namespace NicoLiveAlertTwitterWPF
             }
         }
 
+        private void SettingOtherLiveURLDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            //他の配信サイトでも自動入場する機能（URL）の削除
+            var pos = (sender as Button).Tag.ToString();
+            otherLive.deleteOtherLiveURL(int.Parse(pos));
+        }
 
+        private void SettingOtherLiveClientDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            //他の配信サイトでも自動入場する機能（クライアント）の削除
+            var pos = (sender as Button).Tag.ToString();
+            otherLive.deleteOtherLiveClient(int.Parse(pos));
+        }
+
+        private void SettingOtherLiveURLAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            //他の配信サイトでも自動入場する機能（URL）の追加
+            otherLive.addOtherLiveURL(SettingOtherLiveURLTextBox.Text);
+        }
+
+        private void SettingOtherLiveClientAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            //他の配信サイトでも自動入場する機能（クライアント）の追加
+            otherLive.addOtherLiveClient(SettingOtherLiveClientTextBox.Text);
+        }
+
+        private void HistoryClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            //履歴全削除
+            programHistory.clearHistory();
+        }
     }
 }

@@ -29,6 +29,9 @@ namespace NicoLiveAlertTwitterWPF.Twitter
         //履歴機能
         ProgramHistory.ProgramHistory programHistory = new ProgramHistory.ProgramHistory();
 
+        //他の配信サイトでも利用できるように
+        OtherLive.OtherLiveList otherLive = new OtherLive.OtherLiveList();
+
         public void connectFilterStream(MainWindow page)
         {
             //ログイン情報取得
@@ -82,28 +85,77 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                     await page.Dispatcher.BeginInvoke((Action)(() =>
                                     {
                                         //UIスレッドで動く
+
+                                        //番組をブラウザで開いたかチェック
                                         var opend = false;
 
                                         //レスポンスのEntitiesにニコ生のURLがあるかも？
                                         var entities = tw.Entities.Urls;
                                         foreach (var url in entities)
                                         {
-                                            if (!string.IsNullOrEmpty(findProgramId(url.Url)))
+                                            if (!string.IsNullOrEmpty(findProgramId(url.ExpandedUrl)))
                                             {
-                                                lunchBrowser(findProgramId(tw.Text));
+                                                //ニコ生の場合は番組IDを正規表現で取り出す
+                                                lunchBrowser(findProgramId(url.ExpandedUrl));
                                                 showNotification(tw);
                                                 setMicrosoftTimeline(tw);
                                                 //履歴追加
-                                                programHistory.addHistory(findProgramId(url.Url));
+                                                programHistory.addHistory(findProgramId(url.ExpandedUrl));
                                                 opend = true;
-                                                //ダイアログ
+                                                //通知
                                                 page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                            }
+                                            else
+                                            {
+                                                if (Properties.Settings.Default.setting_otherlive_mode != "")
+                                                {
+                                                    if (Boolean.Parse(Properties.Settings.Default.setting_otherlive_mode))
+                                                    {
+                                                        //ニコ生以外はこっちに来る。
+                                                        //URLで探す。
+                                                        foreach (var i in otherLive.urlList)
+                                                        {
+                                                            //forEachで回す
+                                                            if (url.ExpandedUrl.Contains(i))
+                                                            {
+                                                                //あった！
+                                                                opend = true;
+                                                                //開く
+                                                                launchBrowserOtherLive(url.ExpandedUrl);
+                                                                //履歴追加
+                                                                programHistory.addOtherLiveHistory(tw, url.ExpandedUrl);
+                                                                //通知
+                                                                page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                            }
+                                                        }
+                                                        //もし無かったとき
+                                                        if (opend == false)
+                                                        {
+                                                            //クライアント名で探す
+                                                            foreach (var i in otherLive.clientList)
+                                                            {
+                                                                //forEachで回す
+                                                                if (tw.Source.Contains(i))
+                                                                {
+                                                                    //あった！
+                                                                    opend = true;
+                                                                    launchBrowserOtherLive(url.ExpandedUrl);
+                                                                    //履歴追加
+                                                                    programHistory.addOtherLiveHistory(tw, url.ExpandedUrl);
+                                                                    //通知
+                                                                    page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
 
                                         if (opend == false)
                                         {
                                             //上のEntities.urls[]で取れるはずだけど番組IDだけとかでも動くように
+                                            //ここはニコ生だけ。
                                             if (!string.IsNullOrEmpty(findProgramId(tw.Text)))
                                             {
                                                 lunchBrowser(findProgramId(tw.Text));
@@ -111,11 +163,10 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                                 //履歴追加
                                                 programHistory.addHistory(findProgramId(tw.Text));
                                                 setMicrosoftTimeline(tw);
-                                                //ダイアログ
+                                                //通知
                                                 page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
                                             }
                                         }
-
                                     }));
                                 }
                             }
@@ -218,7 +269,12 @@ namespace NicoLiveAlertTwitterWPF.Twitter
             {
                 System.Diagnostics.Process.Start("https://live2.nicovideo.jp/watch/" + programId);
             }
+        }
 
+        //他の配信サイト用ブラウザ起動
+        private void launchBrowserOtherLive(string url)
+        {
+            System.Diagnostics.Process.Start(url);
         }
 
         //通知

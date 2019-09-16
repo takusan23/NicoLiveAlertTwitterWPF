@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CoreTweet;
+using Newtonsoft.Json;
 using NicoLiveAlertTwitterWPF.ListViewClass;
 using NicoLiveAlertTwitterWPF.niconico;
 using System;
@@ -7,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace NicoLiveAlertTwitterWPF.ProgramHistory
 {
@@ -40,31 +42,62 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
             if (Properties.Settings.Default.program_history != "")
             {
                 //追加
-                var programList = Properties.Settings.Default.program_history;
-                var programJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>(programList);
-                programJSONArray.Add(new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
+                var historyList = Properties.Settings.Default.program_history;
+                var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>(historyList);
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
                 //JSON配列に変換
-                Properties.Settings.Default.autoadd_community = JsonConvert.SerializeObject(programJSONArray);
+                Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
             else
             {
                 //初めての履歴///
-                var programJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>("[]");
-                programJSONArray.Add(new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
+                var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>("[]");
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
                 //JSON配列に変換
-                Properties.Settings.Default.autoadd_community = JsonConvert.SerializeObject(programJSONArray);
+                Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
             Properties.Settings.Default.Save();
+            loadHisotry();
+        }
+
+        public void addOtherLiveHistory(Status tw, string url)
+        {
+            //履歴機能
+            var unix = new DateTimeOffset(tw.CreatedAt.AddHours(9).Ticks, new TimeSpan(+09, 00, 00));
+            if (Properties.Settings.Default.program_history != "")
+            {
+                //追加
+                var historyList = Properties.Settings.Default.program_history;
+                var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>(historyList);
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds() });
+                //JSON配列に変換
+                Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
+            }
+            else
+            {
+                //初めての履歴///
+                var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>("[]");
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds() });
+                //JSON配列に変換
+                Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
+            }
+            Properties.Settings.Default.Save();
+            loadHisotry();
         }
 
         public void clearHistory()
         {
-            if (Properties.Settings.Default.program_history != "")
+            //確認ダイアログ
+            var result = System.Windows.MessageBox.Show("履歴を全削除しますか？", "履歴", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (result == MessageBoxResult.OK)
             {
-                Properties.Settings.Default.program_history = "";
-                Properties.Settings.Default.Save();
+                if (Properties.Settings.Default.program_history != "")
+                {
+                    Properties.Settings.Default.program_history = "";
+                    Properties.Settings.Default.Save();
+                }
+                loadHisotry();
             }
         }
-
     }
 }
