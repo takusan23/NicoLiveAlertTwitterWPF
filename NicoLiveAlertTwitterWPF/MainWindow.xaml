@@ -22,7 +22,7 @@
 
         </tb:TaskbarIcon>
 
-        <StackPanel DockPanel.Dock="Left" Background="LightSkyBlue" MinWidth="200">
+        <StackPanel DockPanel.Dock="Left" Background="WhiteSmoke" MinWidth="200">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <TextBlock x:Name="FilterStreamTextBlock" Text="リアルタイム更新を開始　"/>
