@@ -221,6 +221,9 @@
                                     <Button Foreground="#ffffff" x:Name="AutoAddAdmissionButton" Click="AutoAddAdmissionButton_Click" Content="追加"/>
                                 </StackPanel>
                             </StackPanel>
+                            <StackPanel Margin="5">
+                                <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="AutoAddAdmissionAllButton" Click="AutoAddAdmissionAllButton_Click" Content="フォロー中のコミュニティを全て追加"/>
+                            </StackPanel>
                         </StackPanel>
                         <ListView x:Name="AutoAddAdmissionListView">
                             <ListView.ItemTemplate>
@@ -303,7 +306,9 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-
+                            <StackPanel DockPanel.Dock="Top">
+                                <!-- "一番最後に DockPanel.Dock="Top" しないと最後のListViewが伸びてしまうので注意です。"-->
+                            </StackPanel>
                         </DockPanel>
                     </ScrollViewer>
 
@@ -313,7 +318,7 @@
                         <TextBlock Text="このアプリについて" FontSize="20"/>
                         <StackPanel Margin="10">
                             <TextBlock Text="ニコ生アラート（青鳥WPF）" FontSize="20"/>
-                            <TextBlock Text="1.0 2019/09/16" FontSize="20"/>
+                            <TextBlock x:Name="AppInfoVersionTextBox" Text="1.0 2019/09/16" FontSize="20"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="何かあればどうぞ" FontSize="20"/>
@@ -322,6 +327,9 @@
                                 <Button Margin="10" Name="AppInfoMastodonButton" Click="AppInfoButton_Click"  Foreground="#ffffff" Content="Mastodon"/>
                                 <Button Margin="10" Name="AppInfoGitHubButton"  Click="AppInfoButton_Click" Foreground="#ffffff" Content="GitHub"/>
                             </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <Button Foreground="#ffffff" HorizontalAlignment="Left" Content="更新の確認" Name="AppInfoUpdateCheckButton" Click="AppInfoUpdateCheckButton_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

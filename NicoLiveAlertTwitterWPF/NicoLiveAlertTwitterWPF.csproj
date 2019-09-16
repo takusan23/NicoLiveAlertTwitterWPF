@@ -239,8 +239,10 @@
       <DependentUpon>AutoAdmissionDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="AutoAdmission\AutoAdmissionList.cs" />
+    <Compile Include="Info\AppUpdateCheck.cs" />
     <Compile Include="JSONClass\AccountListViewData.cs" />
     <Compile Include="JSONClass\AutoAdmissionJSON.cs" />
+    <Compile Include="JSONClass\GitHubReleaseJSON.cs" />
     <Compile Include="JSONClass\NicoFavList.cs" />
     <Compile Include="JSONClass\NicoFavListJSON.cs" />
     <Compile Include="JSONClass\NicoProgramInfoJSON.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="ListViewClass\OtherLiveSiteListViewData.cs" />
     <Compile Include="ListViewClass\ProgramHistoryListViewData.cs" />
     <Compile Include="ListViewClass\ProgramListViewData.cs" />
+    <Compile Include="niconico\NicoCommnityList.cs" />
     <Compile Include="niconico\NicoLiveFavList.cs" />
     <Compile Include="niconico\NicoLiveProgramInfo.cs" />
     <Compile Include="niconico\NicoLogin.cs" />

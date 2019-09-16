@@ -1,6 +1,7 @@
 ﻿using Hardcodet.Wpf.TaskbarNotification;
 using MaterialDesignThemes.Wpf;
 using NicoLiveAlertTwitterWPF.AutoAdmission;
+using NicoLiveAlertTwitterWPF.Info;
 using NicoLiveAlertTwitterWPF.niconico;
 using NicoLiveAlertTwitterWPF.Twitter;
 using System;
@@ -26,6 +27,9 @@ namespace NicoLiveAlertTwitterWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        //現在のバージョン？
+        public static string AppVersion = "1.0.0 2019/09/17";
 
         //ページの配列
         List<Grid> pageList = new List<Grid>();
@@ -91,7 +95,6 @@ namespace NicoLiveAlertTwitterWPF
             //予約枠自動登録
             autoAddAdmission.loadAutoAddAutoAdmissionList();
             AutoAddAdmissionListView.ItemsSource = autoAddAdmission.list;
-            AutoAddAdmissionTimeTextBox.Text = Properties.Settings.Default.autoadd_time;
 
             //予約枠自動入場が始まるか監視
             autoAdmission.startAutoAdmission(this);
@@ -396,6 +399,10 @@ namespace NicoLiveAlertTwitterWPF
             {
                 SettingOtherLiveSwitch.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_otherlive_mode);
             }
+            if (Properties.Settings.Default.autoadd_time != "")
+            {
+                AutoAddAdmissionTimeTextBox.Text = Properties.Settings.Default.autoadd_time;
+            }
         }
 
         private void AppInfoButton_Click(object sender, RoutedEventArgs e)
@@ -451,6 +458,24 @@ namespace NicoLiveAlertTwitterWPF
         {
             //履歴全削除
             programHistory.clearHistory();
+        }
+
+        private void AutoAddAdmissionAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            //削除ダイアログ
+            var result = System.Windows.MessageBox.Show("参加中のコミュニティを全て追加しますか？", "参加コミュ全追加", MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            if (result == MessageBoxResult.OK)
+            {
+                var community = new NicoCommnityList();
+                community.getFollowCommunity("https://com.nicovideo.jp/community", autoAddAdmission);
+            }
+        }
+
+        private void AppInfoUpdateCheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            //更新の確認
+            var update = new AppUpdateCheck();
+            update.checkNewVersion();
         }
     }
 }
