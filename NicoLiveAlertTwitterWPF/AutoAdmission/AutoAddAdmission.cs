@@ -279,23 +279,30 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             //予約枠自動登録するコミュニティリスト
             //設定読み込み
             var communityList = new List<string>();
-            var communityString = Properties.Settings.Default.autoadd_community;
-            var communityJsonArray = JsonConvert.DeserializeObject<List<AutoAddAutoAdmissionListViewData>>(communityString);
-            foreach (var item in communityJsonArray)
+            if (Properties.Settings.Default.autoadd_community != "")
             {
-                communityList.Add(item.ID);
+                var communityString = Properties.Settings.Default.autoadd_community;
+                var communityJsonArray = JsonConvert.DeserializeObject<List<AutoAddAutoAdmissionListViewData>>(communityString);
+                foreach (var item in communityJsonArray)
+                {
+                    communityList.Add(item.ID);
+                }
             }
+
 
             //今の予約枠自動登録リスト
             //設定読み込み
             var autoAddList = new List<string>();
-            var addAdmissionString = Properties.Settings.Default.auto_admission_list;
-            var addAdmissionJsonArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(addAdmissionString);
-            foreach (var item in addAdmissionJsonArray)
+            if (Properties.Settings.Default.auto_admission_list != "")
             {
-                autoAddList.Add(item.ID);
+                var addAdmissionString = Properties.Settings.Default.auto_admission_list;
+                var addAdmissionJsonArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(addAdmissionString);
+                foreach (var item in addAdmissionJsonArray)
+                {
+                    autoAddList.Add(item.ID);
+                }
             }
-
+            
 
             //追加済みコミュニティだった！
             if (communityList.Contains(communityId))
