@@ -13,16 +13,16 @@
         MinWidth="400"
         Title="ニコ生アラート（青鳥WPF）" Height="450" Width="800">
 
-    
+
     <DockPanel>
 
 
         <tb:TaskbarIcon x:Name="NotifyIcon"
                 IconSource="Icon/Icon.ico">
-            
+
         </tb:TaskbarIcon>
 
-        <StackPanel DockPanel.Dock="Left" Background="WhiteSmoke" MinWidth="200">
+        <StackPanel DockPanel.Dock="Left" Background="LightSkyBlue" MinWidth="200">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <TextBlock x:Name="FilterStreamTextBlock" Text="リアルタイム更新を開始　"/>
@@ -326,10 +326,8 @@
                                 <Button Margin="10" Name="AppInfoTwitterButton" Click="AppInfoButton_Click" Foreground="#ffffff" Content="Twitter"/>
                                 <Button Margin="10" Name="AppInfoMastodonButton" Click="AppInfoButton_Click"  Foreground="#ffffff" Content="Mastodon"/>
                                 <Button Margin="10" Name="AppInfoGitHubButton"  Click="AppInfoButton_Click" Foreground="#ffffff" Content="GitHub"/>
+                                <Button Margin="10" Foreground="#ffffff" HorizontalAlignment="Left" Content="更新の確認" Name="AppInfoUpdateCheckButton" Click="AppInfoUpdateCheckButton_Click"/>
                             </StackPanel>
-                        </StackPanel>
-                        <StackPanel>
-                            <Button Foreground="#ffffff" HorizontalAlignment="Left" Content="更新の確認" Name="AppInfoUpdateCheckButton" Click="AppInfoUpdateCheckButton_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>
