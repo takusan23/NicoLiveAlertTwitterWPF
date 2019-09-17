@@ -32,6 +32,12 @@ namespace NicoLiveAlertTwitterWPF.Twitter
         //他の配信サイトでも利用できるように
         OtherLive.OtherLiveList otherLive = new OtherLive.OtherLiveList();
 
+        //番組情報API
+        NicoLiveProgramInfo nicoLiveProgramInfo = new NicoLiveProgramInfo();
+
+        //予約枠自動入場追加
+        AutoAdmission.AutoAdmissionList autoAdmissionList = new AutoAdmission.AutoAdmissionList();
+
         public void connectFilterStream(MainWindow page)
         {
             //ログイン情報取得
@@ -82,7 +88,7 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                                                     Debug.WriteLine("-------------------");
                                     */
 
-                                    await page.Dispatcher.BeginInvoke((Action)(() =>
+                                    await page.Dispatcher.BeginInvoke((Action)(async () =>
                                     {
                                         //UIスレッドで動く
 
@@ -96,19 +102,42 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                             if (!string.IsNullOrEmpty(findProgramId(url.ExpandedUrl)))
                                             {
                                                 //ニコ生の場合は番組IDを正規表現で取り出す
+
+                                                //生主が予約枠の宣伝ツイートをしたときは予約枠自動入場に追加する。
+                                                //でもAPIを叩いて結果を待ってるのは遅いのでとりあえず無条件でブラウザ起動します。回線弱者
+
                                                 lunchBrowser(findProgramId(url.ExpandedUrl));
                                                 showNotification(tw);
                                                 setMicrosoftTimeline(tw);
-                                                //履歴追加
-                                                programHistory.addHistory(findProgramId(url.ExpandedUrl));
-                                                opend = true;
-                                                //通知
-                                                page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                //API叩く。
+                                                var result = await nicoLiveProgramInfo.getProgramInfo(findProgramId(url.ExpandedUrl));
+                                                if (result.data.status == "reserved")
+                                                {
+                                                    //設定で切り替えるようにする。
+                                                    if (Properties.Settings.Default.setting_filterstream_addadmission == "" || Boolean.Parse(Properties.Settings.Default.setting_filterstream_addadmission) == true)
+                                                    {
+                                                        //初期状態ではtrueなので。
+                                                        //予約枠だあ！
+                                                        autoAdmissionList.addAdmission(result.data.title, findProgramId(url.ExpandedUrl), result.data.beginAt, false);
+                                                        //通知
+                                                        page.NotifyIcon.ShowBalloonTip("予約枠のツイートを見つけました。予約枠自動入場に追加します。", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    //番組開始ツイートだあ！
+                                                    //履歴追加
+                                                    programHistory.addHistory(findProgramId(url.ExpandedUrl));
+                                                    opend = true;
+                                                    //通知
+                                                    page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                }
                                             }
                                             else
                                             {
                                                 if (Properties.Settings.Default.setting_otherlive_mode != "")
                                                 {
+                                                    //他の配信サイトでも有効の場合はここ
                                                     if (Boolean.Parse(Properties.Settings.Default.setting_otherlive_mode))
                                                     {
                                                         //ニコ生以外はこっちに来る。
@@ -158,13 +187,28 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                             //ここはニコ生だけ。
                                             if (!string.IsNullOrEmpty(findProgramId(tw.Text)))
                                             {
+                                                //生主が予約枠の宣伝ツイートをしたときは予約枠自動入場に追加する。
+                                                //でもAPIを叩いて結果を待ってるのは遅いのでとりあえず無条件でブラウザ起動します。回線弱者
+
                                                 lunchBrowser(findProgramId(tw.Text));
                                                 showNotification(tw);
-                                                //履歴追加
-                                                programHistory.addHistory(findProgramId(tw.Text));
                                                 setMicrosoftTimeline(tw);
-                                                //通知
-                                                page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                //API叩く。
+                                                var result = await nicoLiveProgramInfo.getProgramInfo(findProgramId(tw.Text));
+                                                if (result.data.status == "reserved")
+                                                {
+                                                    //予約枠だあ！
+                                                    autoAdmissionList.addAdmission(result.data.title, findProgramId(tw.Text), result.data.beginAt, false);
+                                                }
+                                                else
+                                                {
+                                                    //番組開始ツイートだあ！
+                                                    //履歴追加
+                                                    programHistory.addHistory(findProgramId(tw.Text));
+                                                    opend = true;
+                                                    //通知
+                                                    page.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", tw.Text, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+                                                }
                                             }
                                         }
                                     }));

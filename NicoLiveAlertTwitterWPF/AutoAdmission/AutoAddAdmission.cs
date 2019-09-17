@@ -31,6 +31,10 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
         //定期的にフォロー中番組を見る
         public DispatcherTimer followTimer;
 
+
+        //予約枠自動入場に追加
+        AutoAdmissionList autoAdmissionList = new AutoAdmissionList();
+
         public void loadAutoAddAutoAdmissionList()
         {
             list.Clear();
@@ -238,7 +242,6 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                         //forEachで取り出す
                         if (nicoJSON != null)
                         {
-                            var pos = 0;
                             foreach (var program in nicoJSON.pageContents.favorites.favoritePrograms.programs)
                             {
                                 //予約枠だけ取得
@@ -302,36 +305,13 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     autoAddList.Add(item.ID);
                 }
             }
-            
 
             //追加済みコミュニティだった！
             if (communityList.Contains(communityId))
             {
-                //すでに追加済みの可能性
-                if (!autoAddList.Contains(id))
-                {
-                    if (Properties.Settings.Default.auto_admission_list != "")
-                    {
-                        //追加
-                        var account_list = Properties.Settings.Default.auto_admission_list;
-                        var accountJSONArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(account_list);
-                        accountJSONArray.Add(new AutoAdmissionJSON { Name = name, ID = id, UnixTime = unix });
-                        //JSON配列に変換
-                        Properties.Settings.Default.auto_admission_list = JsonConvert.SerializeObject(accountJSONArray);
-                    }
-                    else
-                    {
-                        //初めて
-                        var accountJSONArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>("[]");
-                        accountJSONArray.Add(new AutoAdmissionJSON { Name = name, ID = id, UnixTime = unix });
-                        //JSON配列に変換
-                        Properties.Settings.Default.auto_admission_list = JsonConvert.SerializeObject(accountJSONArray);
-                    }
-                    Properties.Settings.Default.Save();
-                }
+                //ついか
+                autoAdmissionList.addAdmission(name, id, unix, false);
             }
-
-
         }
     }
 }

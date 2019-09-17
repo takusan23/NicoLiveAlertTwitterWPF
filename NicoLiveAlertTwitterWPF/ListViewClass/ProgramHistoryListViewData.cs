@@ -12,5 +12,7 @@ namespace NicoLiveAlertTwitterWPF.ListViewClass
         public long BeginAt { get; set; }
         public string LiveId { get; set; }
         public string dateTime { get; set; }
+        public string webSiteName { get; set; }
+        
     }
 }

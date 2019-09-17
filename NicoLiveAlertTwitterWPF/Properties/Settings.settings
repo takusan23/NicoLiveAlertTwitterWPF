@@ -53,5 +53,8 @@
     <Setting Name="setting_otherlive_mode" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="setting_filterstream_addadmission" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -28,7 +28,7 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
                 foreach (var json in programJSONArray)
                 {
                     var dateTime = DateTimeOffset.FromUnixTimeSeconds(json.BeginAt).LocalDateTime;
-                    list.Add(new ProgramHistoryListViewData { Content = json.Content, dateTime = dateTime.ToString(), LiveId = json.LiveId });
+                    list.Add(new ProgramHistoryListViewData { Content = json.Content, dateTime = dateTime.ToString(), LiveId = json.LiveId, webSiteName = json.webSiteName });
                 }
             }
         }
@@ -44,7 +44,7 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
                 //追加
                 var historyList = Properties.Settings.Default.program_history;
                 var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>(historyList);
-                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt, webSiteName = "ニコニコ生放送" });
                 //JSON配列に変換
                 Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
@@ -52,7 +52,7 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
             {
                 //初めての履歴///
                 var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>("[]");
-                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt });
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = result.data.title, LiveId = liveId, BeginAt = result.data.beginAt, webSiteName = "ニコニコ生放送" });
                 //JSON配列に変換
                 Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
@@ -64,12 +64,15 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
         {
             //履歴機能
             var unix = new DateTimeOffset(tw.CreatedAt.AddHours(9).Ticks, new TimeSpan(+09, 00, 00));
+            //配信サイト取り出す
+            var uri = new Uri(url);
+            var name = uri.Host;
             if (Properties.Settings.Default.program_history != "")
             {
                 //追加
                 var historyList = Properties.Settings.Default.program_history;
                 var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>(historyList);
-                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds() });
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds(), webSiteName = name });
                 //JSON配列に変換
                 Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
@@ -77,7 +80,7 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
             {
                 //初めての履歴///
                 var historyJSONArray = JsonConvert.DeserializeObject<List<ProgramHistoryListViewData>>("[]");
-                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds() });
+                historyJSONArray.Insert(0, new ProgramHistoryListViewData { Content = tw.Text, LiveId = url, BeginAt = unix.ToUnixTimeSeconds(), webSiteName = name });
                 //JSON配列に変換
                 Properties.Settings.Default.program_history = JsonConvert.SerializeObject(historyJSONArray);
             }
@@ -88,8 +91,8 @@ namespace NicoLiveAlertTwitterWPF.ProgramHistory
         public void clearHistory()
         {
             //確認ダイアログ
-            var result = System.Windows.MessageBox.Show("履歴を全削除しますか？", "履歴", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if (result == MessageBoxResult.OK)
+            var result = System.Windows.MessageBox.Show("履歴を全削除しますか？", "履歴", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (result == MessageBoxResult.Yes)
             {
                 if (Properties.Settings.Default.program_history != "")
                 {

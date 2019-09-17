@@ -65,6 +65,8 @@ namespace NicoLiveAlertTwitterWPF
         {
             InitializeComponent();
 
+            Console.WriteLine(Properties.Settings.Default.setting_filterstream_addadmission == "" || Boolean.Parse(Properties.Settings.Default.setting_filterstream_addadmission));
+
             pageList.Add(HomePanel);
             pageList.Add(LiveStreamerAccountPanel);
             pageList.Add(AutoAdmissionPanel);
@@ -100,7 +102,7 @@ namespace NicoLiveAlertTwitterWPF
             autoAdmission.startAutoAdmission(this);
 
             //履歴機能
-            Console.WriteLine(Properties.Settings.Default.program_history);
+            //Console.WriteLine(Properties.Settings.Default.program_history);
             programHistory.loadHisotry();
             HistoryListView.ItemsSource = programHistory.list;
 
@@ -142,13 +144,13 @@ namespace NicoLiveAlertTwitterWPF
         private void NicoRepoAddAdmissionButton_Click(object sender, RoutedEventArgs e)
         {
             //ニコレポから予約枠自動入場追加した
-            nicoRepoList.addAdmissionProgram(int.Parse((sender as Button).Tag.ToString()));
+            nicoRepoList.addAdmissionProgram(int.Parse((sender as Button).Tag.ToString()), autoAdmissionList);
         }
 
         private void NicoFavAddAutoAdmissionButton_Click(object sender, RoutedEventArgs e)
         {
             //ニコ生フォロー中から予約枠自動入場追加した
-            nicoLiveFavList.addAdmissionProgram(int.Parse((sender as Button).Tag.ToString()));
+            nicoLiveFavList.addAdmissionProgram(int.Parse((sender as Button).Tag.ToString()), autoAdmissionList);
         }
 
         private void AutoAdmissionDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -309,7 +311,7 @@ namespace NicoLiveAlertTwitterWPF
                     var id = autoAdmissionDialog.ProgramID;
 
                     //追加
-                    autoAdmissionList.addAdmission(title, id, unixTime);
+                    autoAdmissionList.addAdmission(title, id, unixTime, true);
                 }
                 else
                 {
@@ -361,6 +363,9 @@ namespace NicoLiveAlertTwitterWPF
                 case "SettingOtherLiveSwitch":
                     Properties.Settings.Default.setting_otherlive_mode = check;
                     break;
+                case "SettingFilterStreamAddAdmissionCheck":
+                    Properties.Settings.Default.setting_filterstream_addadmission = check;
+                    break;
             }
             Properties.Settings.Default.Save();
         }
@@ -402,6 +407,11 @@ namespace NicoLiveAlertTwitterWPF
             if (Properties.Settings.Default.autoadd_time != "")
             {
                 AutoAddAdmissionTimeTextBox.Text = Properties.Settings.Default.autoadd_time;
+            }
+            if (Properties.Settings.Default.setting_filterstream_addadmission != "")
+            {
+                //FilterStreamで予約枠のツイートが流れてきた場合は予約枠自動入場に登録する設定。
+                SettingFilterStreamAddAdmissionCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_filterstream_addadmission);
             }
         }
 
@@ -463,8 +473,8 @@ namespace NicoLiveAlertTwitterWPF
         private void AutoAddAdmissionAllButton_Click(object sender, RoutedEventArgs e)
         {
             //削除ダイアログ
-            var result = System.Windows.MessageBox.Show("参加中のコミュニティを全て追加しますか？", "参加コミュ全追加", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-            if (result == MessageBoxResult.OK)
+            var result = System.Windows.MessageBox.Show("参加中のコミュニティを全て追加しますか？", "参加コミュ全追加", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (result == MessageBoxResult.Yes)
             {
                 var community = new NicoCommnityList();
                 community.getFollowCommunity("https://com.nicovideo.jp/community", autoAddAdmission);

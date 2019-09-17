@@ -107,63 +107,19 @@ namespace NicoLiveAlertTwitterWPF.niconico
         }
 
 
-        public void addAdmissionProgram(int pos)
+        public void addAdmissionProgram(int pos, AutoAdmission.AutoAdmissionList autoAdmissionList)
         {
-            //登録ボタン押した。ダイアログだす
+            //登録ボタン押した。
+
             var item = list[pos];
+
             var dateTime = FromUnixTime(item.beginAt);
-
             //確認ダイアログ
-            var result = System.Windows.MessageBox.Show($"この番組は開場時間になったら自動で入場します。\n{item.Name} 開場時間 : {dateTime.ToString()}", "登録", MessageBoxButton.OKCancel, MessageBoxImage.Information);
-
-            //今の予約枠自動登録リスト
-            //設定読み込み
-            var admissionList = new List<string>();
-            var addAdmissionString = Properties.Settings.Default.auto_admission_list;
-            var addAdmissionJsonArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(addAdmissionString);
-            if (addAdmissionJsonArray != null)
+            var result = System.Windows.MessageBox.Show($"この番組は開場時間になったら自動で入場します。\n{item.Name} 開場時間 : {dateTime.ToString()}", "登録", MessageBoxButton.YesNo, MessageBoxImage.Information);
+            if (result == MessageBoxResult.Yes)
             {
-                foreach (var admission in addAdmissionJsonArray)
-                {
-                    admissionList.Add(admission.ID);
-                }
+                autoAdmissionList.addAdmission(item.Name, item.ID, item.beginAt, true);
             }
-
-
-            //かぶってないか確認
-            if (!admissionList.Contains(item.ID))
-            {
-                //かぶってなければ追加
-                //押したとき
-                if (result == MessageBoxResult.OK)
-                {
-                    //追加
-                    if (Properties.Settings.Default.auto_admission_list != "")
-                    {
-                        //追加
-                        var account_list = Properties.Settings.Default.auto_admission_list;
-                        var accountJSONArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(account_list);
-                        accountJSONArray.Add(new AutoAdmissionJSON { Name = item.Name, ID = item.ID, UnixTime = item.beginAt });
-                        //JSON配列に変換
-                        Properties.Settings.Default.auto_admission_list = JsonConvert.SerializeObject(accountJSONArray);
-                    }
-                    else
-                    {
-                        //初めて
-                        var accountJSONArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>("[]");
-                        accountJSONArray.Add(new AutoAdmissionJSON { Name = item.Name, ID = item.ID, UnixTime = item.beginAt });
-                        //JSON配列に変換
-                        Properties.Settings.Default.auto_admission_list = JsonConvert.SerializeObject(accountJSONArray);
-                    }
-                    Properties.Settings.Default.Save();
-                }
-            }
-            else
-            {
-                //被りダイアログ
-                System.Windows.MessageBox.Show($"追加済みです。\n{item.Name} 開場時間：{dateTime.ToString()}", "追加済みです。", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
         }
 
         public DateTime FromUnixTime(long unixTime)

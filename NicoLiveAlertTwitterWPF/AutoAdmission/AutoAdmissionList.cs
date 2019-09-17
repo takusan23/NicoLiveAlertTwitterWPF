@@ -57,7 +57,7 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             //削除ボタンおした
 
             var account_list = Properties.Settings.Default.auto_admission_list;
-            var accountJSONArray = JsonConvert.DeserializeObject<List<NicoFavListJSON>>(account_list);
+            var accountJSONArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(account_list);
 
             //確認ダイアログ
             var result = System.Windows.MessageBox.Show($"削除しますか？。\n{accountJSONArray[pos].Name}", "削除", MessageBoxButton.OKCancel, MessageBoxImage.Information);
@@ -80,7 +80,7 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             return DateTimeOffset.FromUnixTimeSeconds(unixTime).LocalDateTime;
         }
 
-        public void addAdmission(string title, string id, long unix)
+        public void addAdmission(string title, string id, long unix, Boolean showDialog)
         {
             //被らないようにする
             //今の予約枠自動登録リスト
@@ -95,7 +95,6 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
 
             //UnixTime->DateTime
             var dateTime = DateTimeOffset.FromUnixTimeSeconds(unix).LocalDateTime;
-
 
             if (!admissionList.Contains(id))
             {
@@ -123,9 +122,12 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             else
             {
                 //被りダイアログ
-                System.Windows.MessageBox.Show($"追加済みです。\n{title}  開場時間 : {dateTime.ToString()}", "追加", MessageBoxButton.OK, MessageBoxImage.Information);
+                //自動追加のときは表示しないように
+                if (showDialog)
+                {
+                    System.Windows.MessageBox.Show($"追加済みです。\n{title}  開場時間 : {dateTime.ToString()}", "追加", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
-
         }
     }
 }

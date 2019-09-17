@@ -172,7 +172,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock TextWrapping="Wrap" x:Name="nico_repo_listview_textblock" Text="{Binding Name}" FontSize="20"/>
+                                    <TextBlock  FontWeight="Bold" TextWrapping="Wrap"  x:Name="nico_repo_listview_textblock" Text="{Binding Name}" FontSize="20"/>
                                     <TextBlock x:Name="nico_repo_time_listview_textblock"  Text="{Binding dateTime}" FontSize="20"/>
                                     <Button HorizontalAlignment="Left" Foreground="#ffffff" x:Name="NicoRepoAddAdmissionButton" Content="登録" Tag="{Binding Pos}" Click="NicoRepoAddAdmissionButton_Click"/>
                                 </StackPanel>
@@ -247,8 +247,12 @@
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock Text="{Binding Content}" FontSize="15"/>
-                                        <TextBlock Text="{Binding LiveId}"/>
-                                        <TextBlock Text="{Binding dateTime}"/>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Margin="2" Text="{Binding webSiteName}"/>
+                                            <TextBlock Margin="2" Text="{Binding LiveId}"/>
+                                            <TextBlock Margin="2" Text="{Binding dateTime}"/>
+                                        </StackPanel>
+
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
@@ -264,6 +268,15 @@
                                 <CheckBox FontSize="15" Content="起動時に予約枠自動登録を始める。"  x:Name="SettingLaunchStartAutoAddAdmissionCheck" Click="SettingCheckBoxClick" />
                             </StackPanel>
 
+                            <TextBlock DockPanel.Dock="Top" Text="リアルタイム更新の設定" FontSize="20"/>
+                            <StackPanel DockPanel.Dock="Top" Margin="5">
+                                <CheckBox  IsChecked="True" FontSize="15" x:Name="SettingFilterStreamAddAdmissionCheck" Click="SettingCheckBoxClick">
+                                    <CheckBox.Content>
+                                        <TextBlock TextWrapping="Wrap" Text="リアルタイム更新中に予約枠のツイート（宣伝）が流れてきた場合は予約枠自動入場に登録して開場時間に入場できるようにする。"></TextBlock>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                            </StackPanel>
+                            
                             <TextBlock DockPanel.Dock="Top" Text="他の配信サイトで利用" FontSize="20"/>
                             <StackPanel DockPanel.Dock="Top" Margin="5">
                                 <CheckBox FontSize="15" Content="他の配信サイトでも自動入場する" x:Name="SettingOtherLiveSwitch" Click="SettingCheckBoxClick"/>

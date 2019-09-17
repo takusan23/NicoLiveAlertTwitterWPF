@@ -226,5 +226,17 @@ namespace NicoLiveAlertTwitterWPF.Properties {
                 this["setting_otherlive_mode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string setting_filterstream_addadmission {
+            get {
+                return ((string)(this["setting_filterstream_addadmission"]));
+            }
+            set {
+                this["setting_filterstream_addadmission"] = value;
+            }
+        }
     }
 }
