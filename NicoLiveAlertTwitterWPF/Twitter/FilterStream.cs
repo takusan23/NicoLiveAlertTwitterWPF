@@ -40,7 +40,7 @@ namespace NicoLiveAlertTwitterWPF.Twitter
 
         public void connectFilterStream(MainWindow page)
         {
-            //ログイン情報取得
+           //ログイン情報取得
             if (Properties.Settings.Default.consumer_key != "")
             {
                 //スレッド止める時に使うらしい。
@@ -87,6 +87,11 @@ namespace NicoLiveAlertTwitterWPF.Twitter
                                                                     Debug.WriteLine(tw.Text);
                                                                     Debug.WriteLine("-------------------");
                                     */
+
+                                    //他の配信サイトでも利用できる配信サイトを読み込む
+                                    otherLive.loadOtherLiveURL();
+                                    otherLive.loadOtherLiveClient();
+
 
                                     await page.Dispatcher.BeginInvoke((Action)(async () =>
                                     {
@@ -241,7 +246,7 @@ namespace NicoLiveAlertTwitterWPF.Twitter
             }
         }
 
-
+   
 
         private void setMicrosoftTimeline(Status tw)
         {
