@@ -309,8 +309,7 @@ namespace NicoLiveAlertTwitterWPF
                 if (htmlJson.pageContents.watch.watchInformation.program.liveCycle == "BeforeOpen")
                 {
                     //UnixTime
-                    //var unixTime = htmlJson.pageContents.watch.watchInformation.program.openAt / 1000L;
-                    var unixTime = 1569065220;
+                    var unixTime = htmlJson.pageContents.watch.watchInformation.program.openAt / 1000L;
                     var title = htmlJson.pageContents.watch.watchInformation.program.title;
                     var id = autoAdmissionDialog.ProgramID;
                     //追加
