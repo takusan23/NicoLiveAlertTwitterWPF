@@ -19,6 +19,8 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
         List<String> liveIdList = new List<String>();
         List<String> nameList = new List<String>();
         List<long> unixTimeList = new List<long>();
+        //1分前通知
+        List<long> unixTimeOneMinutesList = new List<long>();
 
         //予約枠自動入場JSON
         List<AutoAdmissionJSON> autoAdmissionJSON;
@@ -39,6 +41,7 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             liveIdList.Clear();
             nameList.Clear();
             unixTimeList.Clear();
+            unixTimeOneMinutesList.Clear();
 
             //読み込み
             if (Properties.Settings.Default.auto_admission_list != "")
@@ -55,7 +58,7 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     unixTimeList.Add(autoAdmission.UnixTime);
                 }
             }
-        
+
             Timer = new DispatcherTimer();
             Timer.Interval = TimeSpan.FromMilliseconds(1000); //間隔
             Timer.Tick += TickTimer;
@@ -64,10 +67,13 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
 
         private void TickTimer(object sender, object e)
         {
+            //ここで定期実行される
             //クリア
             liveIdList.Clear();
             nameList.Clear();
             unixTimeList.Clear();
+            unixTimeOneMinutesList.Clear();
+
             if (Properties.Settings.Default.auto_admission_list != "")
             {
                 //読み込み
@@ -81,13 +87,16 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     nameList.Add(autoAdmission.Name);
                     liveIdList.Add(autoAdmission.ID);
                     unixTimeList.Add(autoAdmission.UnixTime);
+                    //１分前通知
+                    unixTimeOneMinutesList.Add(autoAdmission.UnixTime - 60);
                 }
 
-                //ここで定期実行される
                 //今のUnixTime取得
                 long nowUnixTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
                 if (unixTimeList.Contains(nowUnixTime))
                 {
+
                     //始まった！
                     var index = unixTimeList.IndexOf(nowUnixTime);
                     var name = nameList[index];
@@ -97,10 +106,14 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     lunchBrowser(liveId);
 
                     //通知出す
-                    showNotification(name);
+                    showNotification("番組が開始しました。入場します！", name);
 
                     //履歴追加
                     programHistory.addHistory(liveId);
+
+                    //Console.WriteLine(index);
+
+                    //Console.WriteLine(JsonConvert.SerializeObject(autoAdmissionJSON));
 
                     //開場したので配列から
                     autoAdmissionJSON.RemoveAt(index);
@@ -108,14 +121,30 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
                     Properties.Settings.Default.auto_admission_list = JsonConvert.SerializeObject(autoAdmissionJSON);
                     Properties.Settings.Default.Save();
                 }
+
+                //１分前に通知する？
+                //設定で選べるように
+                if (Properties.Settings.Default.setting_autoadmission_one_minute_notify != "")
+                {
+                    if (Boolean.Parse(Properties.Settings.Default.setting_autoadmission_one_minute_notify))
+                    {
+                        if (unixTimeOneMinutesList.Contains(nowUnixTime))
+                        {
+                            var index = unixTimeOneMinutesList.IndexOf(nowUnixTime);
+                            var name = nameList[index];
+                            //通知出す
+                            showNotification("１分後に番組に自動入場します。", name);
+                        }
+                    }
+                }
             }
         }
 
 
         //通知
-        private void showNotification(string value)
+        private void showNotification(string title, string value)
         {
-            //window.NotifyIcon.ShowBalloonTip("番組が開始しました。入場します！", value, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
+            window.NotifyIcon.ShowBalloonTip(title, value, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.None);
         }
 
         //ブラウザ起動

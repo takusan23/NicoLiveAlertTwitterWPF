@@ -238,5 +238,17 @@ namespace NicoLiveAlertTwitterWPF.Properties {
                 this["setting_filterstream_addadmission"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string setting_autoadmission_one_minute_notify {
+            get {
+                return ((string)(this["setting_autoadmission_one_minute_notify"]));
+            }
+            set {
+                this["setting_autoadmission_one_minute_notify"] = value;
+            }
+        }
     }
 }

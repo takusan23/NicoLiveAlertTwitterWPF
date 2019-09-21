@@ -276,7 +276,17 @@
                                     </CheckBox.Content>
                                 </CheckBox>
                             </StackPanel>
-                            
+
+                            <TextBlock DockPanel.Dock="Top" Text="自動入場の設定" FontSize="20"/>
+                            <StackPanel DockPanel.Dock="Top" Margin="5">
+                                <CheckBox  IsChecked="False" FontSize="15" x:Name="SettingAutoAdmissionOneMinuteNotifyCheck" Click="SettingCheckBoxClick">
+                                    <CheckBox.Content>
+                                        <TextBlock TextWrapping="Wrap" Text="予約枠自動入場の一分前に通知を送信する。"></TextBlock>
+                                    </CheckBox.Content>
+                                </CheckBox>
+                            </StackPanel>
+
+
                             <TextBlock DockPanel.Dock="Top" Text="他の配信サイトで利用" FontSize="20"/>
                             <StackPanel DockPanel.Dock="Top" Margin="5">
                                 <CheckBox FontSize="15" Content="他の配信サイトでも自動入場する" x:Name="SettingOtherLiveSwitch" Click="SettingCheckBoxClick"/>

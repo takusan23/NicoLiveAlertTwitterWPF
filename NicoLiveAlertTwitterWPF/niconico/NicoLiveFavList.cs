@@ -34,7 +34,7 @@ namespace NicoLiveAlertTwitterWPF.niconico
                 var user_session = Properties.Settings.Default.user_session;
                 //Cookieをせっと（user_session）
                 var cookieContainer = new CookieContainer();
-                var cookie = new Cookie();
+                var cookie = new System.Net.Cookie();
                 cookie.Name = "user_session";
                 cookie.Value = user_session;
                 cookie.Domain = ".nicovideo.jp";

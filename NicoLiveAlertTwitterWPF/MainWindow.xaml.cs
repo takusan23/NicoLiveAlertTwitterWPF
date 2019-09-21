@@ -300,16 +300,19 @@ namespace NicoLiveAlertTwitterWPF
             //予約枠自動入場追加ボタン
             var autoAdmissionDialog = new AutoAdmissionDialog();
             var nicoProgramInfo = new NicoLiveProgramInfo();
+            var nicoHtmlProgram = new NicoLiveHTMLProgram();
             if (autoAdmissionDialog.ShowDialog() == true)
             {
-                var json = await nicoProgramInfo.getProgramInfo(autoAdmissionDialog.ProgramID);
-                if (json.data.status == "reserved")
+                //HTMLからJSON取る
+                //programinfoのAPIだと公式番組（アニメ一挙、朝鮮中央テレビ）などの番組は取得できないのでHTMLの中にあるJSONを取ることにした。
+                var htmlJson = await nicoHtmlProgram.getProgramJSONData(autoAdmissionDialog.ProgramID);
+                if (htmlJson.pageContents.watch.watchInformation.program.liveCycle == "BeforeOpen")
                 {
                     //UnixTime
-                    var unixTime = json.data.beginAt;
-                    var title = json.data.title;
+                    //var unixTime = htmlJson.pageContents.watch.watchInformation.program.openAt / 1000L;
+                    var unixTime = 1569065220;
+                    var title = htmlJson.pageContents.watch.watchInformation.program.title;
                     var id = autoAdmissionDialog.ProgramID;
-
                     //追加
                     autoAdmissionList.addAdmission(title, id, unixTime, true);
                 }
@@ -366,6 +369,9 @@ namespace NicoLiveAlertTwitterWPF
                 case "SettingFilterStreamAddAdmissionCheck":
                     Properties.Settings.Default.setting_filterstream_addadmission = check;
                     break;
+                case "SettingAutoAdmissionOneMinuteNotifyCheck":
+                    Properties.Settings.Default.setting_autoadmission_one_minute_notify = check;
+                    break;
             }
             Properties.Settings.Default.Save();
         }
@@ -412,6 +418,10 @@ namespace NicoLiveAlertTwitterWPF
             {
                 //FilterStreamで予約枠のツイートが流れてきた場合は予約枠自動入場に登録する設定。
                 SettingFilterStreamAddAdmissionCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_filterstream_addadmission);
+            }
+            if (Properties.Settings.Default.setting_autoadmission_one_minute_notify != "")
+            {
+                SettingAutoAdmissionOneMinuteNotifyCheck.IsChecked = Boolean.Parse(Properties.Settings.Default.setting_autoadmission_one_minute_notify);
             }
         }
 

@@ -6,13 +6,14 @@
         xmlns:local="clr-namespace:NicoLiveAlertTwitterWPF.AutoAdmission"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="AutoAdmissionDialog" Height="200" Width="400">
+        Title="予約枠自動入場追加" Height="250" Width="400">
     <Grid>
         <StackPanel Margin="5">
-            <TextBlock Text="予約枠自動入場" FontSize="20"/>
+            <TextBlock Text="予約枠自動入場追加" FontSize="20" FontWeight="Bold"/>
             <StackPanel Margin="5">
-                <TextBlock  Text="番組ID"/>
-                <TextBox x:Name="AutoAdmissionAddDialogProgramID"/>
+                <TextBlock  Text="番組ID" FontSize="20"/>
+                <TextBlock TextWrapping="Wrap" Text="公式番組（アニメ一挙等）でも利用可能です。よかったね。" FontSize="15"/>
+                <TextBox FontSize="20" x:Name="AutoAdmissionAddDialogProgramID"/>
             </StackPanel>
             <StackPanel Margin="5">
                 <Button x:Name="AutoAdmissionAddDialogButton" Click="AutoAdmissionAddDialogButton_Click" Foreground="#ffffff" Content="登録（必要な情報は自動で取得します。）"/>

@@ -243,6 +243,7 @@
     <Compile Include="JSONClass\AccountListViewData.cs" />
     <Compile Include="JSONClass\AutoAdmissionJSON.cs" />
     <Compile Include="JSONClass\GitHubReleaseJSON.cs" />
+    <Compile Include="JSONClass\HTMLProgremJSON.cs" />
     <Compile Include="JSONClass\NicoFavList.cs" />
     <Compile Include="JSONClass\NicoFavListJSON.cs" />
     <Compile Include="JSONClass\NicoProgramInfoJSON.cs" />
@@ -253,6 +254,8 @@
     <Compile Include="ListViewClass\ProgramListViewData.cs" />
     <Compile Include="niconico\NicoCommnityList.cs" />
     <Compile Include="niconico\NicoLiveFavList.cs" />
+    <Compile Include="niconico\NicoLiveGetPlayerStatus.cs" />
+    <Compile Include="niconico\NicoLiveHTMLProgram.cs" />
     <Compile Include="niconico\NicoLiveProgramInfo.cs" />
     <Compile Include="niconico\NicoLogin.cs" />
     <Compile Include="niconico\NicoLoginMailPassDialog.xaml.cs">
