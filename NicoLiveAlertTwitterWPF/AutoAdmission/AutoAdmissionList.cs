@@ -86,11 +86,15 @@ namespace NicoLiveAlertTwitterWPF.AutoAdmission
             //今の予約枠自動登録リスト
             //設定読み込み
             var admissionList = new List<string>();
-            var addAdmissionString = Properties.Settings.Default.auto_admission_list;
-            var addAdmissionJsonArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(addAdmissionString);
-            foreach (var admission in addAdmissionJsonArray)
+            //ないときもある
+            if (Properties.Settings.Default.auto_admission_list != "")
             {
-                admissionList.Add(admission.ID);
+                var addAdmissionString = Properties.Settings.Default.auto_admission_list;
+                var addAdmissionJsonArray = JsonConvert.DeserializeObject<List<AutoAdmissionJSON>>(addAdmissionString);
+                foreach (var admission in addAdmissionJsonArray)
+                {
+                    admissionList.Add(admission.ID);
+                }
             }
 
             //UnixTime->DateTime

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NicoLiveAlertTwitterWPF.niconico"
         mc:Ignorable="d"
         Icon="/Icon/Icon.ico"
-        Title="NicoLoginMailPassDialog" Height="300" Width="200">
+        Title="ニコニコへログイン" Height="300" Width="300">
     <Grid>
         <StackPanel Margin="10">
             <TextBlock Text="niconicoへログイン" FontSize="20"/>
