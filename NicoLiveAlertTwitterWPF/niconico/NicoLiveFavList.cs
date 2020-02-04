@@ -57,9 +57,8 @@ namespace NicoLiveAlertTwitterWPF.niconico
                         var jsonString = await stream.Content.ReadAsStringAsync();
                         var doc = await parser.ParseDocumentAsync(jsonString);
 
-
                         //フォロー中の番組のJSON
-                        var json = doc.Head.GetElementsByTagName("script")[3].TextContent;
+                        var json = doc.Head.GetElementsByTagName("script")[5].TextContent;
                         json = HttpUtility.UrlDecode(json);
 
                         json = json.Replace("window.__initial_state__ = \"", "");

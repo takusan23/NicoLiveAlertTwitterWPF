@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 public class Submodules
 {
@@ -106,7 +107,7 @@ public class EdgeStream
     public object protocol { get; set; }
     public object resource { get; set; }
     public object quality { get; set; }
-    public List<object> availableQuality { get; set; }
+    //  public List<object> availableQuality { get; set; }
 }
 
 public class LiveVideoComponent
@@ -212,11 +213,64 @@ public class InputFocus
     public bool isFocusingOnTextInputElement { get; set; }
 }
 
-public class BottomNotification
+public class BottomNotificationItem
 {
     public bool isOpen { get; set; }
     public int current { get; set; }
     public int next { get; set; }
+}
+
+public class StartAt
+{
+    public object value { get; set; }
+    public object format { get; set; }
+}
+
+public class Duration
+{
+    public object value { get; set; }
+    public object format { get; set; }
+}
+
+public class StatusBar
+{
+    public StartAt startAt { get; set; }
+    public Duration duration { get; set; }
+}
+
+public class ProgramTitle
+{
+    public object text { get; set; }
+}
+
+public class ProgramSummary
+{
+    public ProgramTitle programTitle { get; set; }
+}
+
+public class Name
+{
+    public object text { get; set; }
+}
+
+public class ProgramProviderSummary
+{
+    public Name name { get; set; }
+}
+
+public class Program
+{
+    public object id { get; set; }
+    public StatusBar statusBar { get; set; }
+    public ProgramSummary programSummary { get; set; }
+    public ProgramProviderSummary programProviderSummary { get; set; }
+    public object status { get; set; }
+}
+
+public class BottomNotification
+{
+    public BottomNotificationItem bottomNotificationItem { get; set; }
+    public Program program { get; set; }
 }
 
 public class Reservation
@@ -267,7 +321,7 @@ public class Watch
 
 public class SuggestTags
 {
-    public List<object> suggestTags { get; set; }
+    //  public List<object> suggestTags { get; set; }
 }
 
 public class WatchEventLog
@@ -327,7 +381,7 @@ public class Ranking
 
 public class SearchHistory
 {
-    public List<object> searchHistory { get; set; }
+    // public List<object> searchHistory { get; set; }
 }
 
 public class BrowserRuntime
@@ -526,10 +580,16 @@ public class RuntimeError
     public int denominator { get; set; }
 }
 
+public class WatchStability
+{
+    public int denominator { get; set; }
+}
+
 public class Types
 {
     public Startup startup { get; set; }
     public RuntimeError runtimeError { get; set; }
+    public WatchStability watchStability { get; set; }
 }
 
 public class Logging
@@ -553,12 +613,12 @@ public class SuggestSearch
 
 public class AssetsConfig
 {
-    public List<string> app { get; set; }
+    // public List<string> app { get; set; }
     public string comment { get; set; }
     public string nico { get; set; }
     public string vendor { get; set; }
     public string video { get; set; }
-    public List<string> css { get; set; }
+    //  public List<string> css { get; set; }
 }
 
 public class ClientConfig
@@ -566,6 +626,7 @@ public class ClientConfig
     public Account2 account { get; set; }
     public NiconicoService niconicoService { get; set; }
     public string niconicoServiceListPageUrl { get; set; }
+    public string liveAppLandingPageUrl { get; set; }
     public string live1PcBaseUrl { get; set; }
     public SpApp spApp { get; set; }
     public FrontendServer frontendServer { get; set; }
@@ -607,6 +668,7 @@ public class Url
 public class RequestInfo
 {
     public string ipAddress { get; set; }
+    public string userAgent { get; set; }
     public Url url { get; set; }
 }
 
@@ -625,6 +687,7 @@ public class Constants
     public string frontendId { get; set; }
     public RequestInfo requestInfo { get; set; }
     public Maintenance maintenance { get; set; }
+    public string frontendVersion { get; set; }
 }
 
 public class __invalid_type__5
@@ -679,7 +742,7 @@ public class Submodules9
 
 public class OnAir
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules9 submodules { get; set; }
@@ -702,7 +765,7 @@ public class Submodules11
 
 public class BeforeOpen
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules11 submodules { get; set; }
@@ -725,7 +788,7 @@ public class Submodules13
 
 public class Ended
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules13 submodules { get; set; }
@@ -751,7 +814,7 @@ public class PageError
 
 public class TimeshiftReservations
 {
-    public List<object> reservationList { get; set; }
+    //  public List<object> reservationList { get; set; }
 }
 
 public class Programs2
@@ -773,10 +836,10 @@ public class Statistics
 {
     public int watchCount { get; set; }
     public int commentCount { get; set; }
-    public int? reservationCount { get; set; }
+    public int reservationCount { get; set; }
 }
 
-public class Program
+public class Program2
 {
     public string id { get; set; }
     public string title { get; set; }
@@ -786,7 +849,7 @@ public class Program
     public int providerType { get; set; }
     public string liveCycle { get; set; }
     public long beginAt { get; set; }
-    public object endAt { get; set; }
+    public long endAt { get; set; }
     public bool isMemberOnly { get; set; }
     public Statistics statistics { get; set; }
     public string socialGroupName { get; set; }
@@ -796,11 +859,13 @@ public class Program
     public object tsScreenshotThumbnailUrl { get; set; }
     public int? elapsedTimeSeconds { get; set; }
     public object durationSeconds { get; set; }
+    public bool isTimeshiftEnabled { get; set; }
+    public object timeshiftEndAt { get; set; }
 }
 
 public class FavoritePrograms
 {
-    public List<Program> programs { get; set; }
+    public List<Program2> programs { get; set; }
 }
 
 public class Favorites2
@@ -830,7 +895,7 @@ public class WatchRestriction2
     public TrialWatch2 trialWatch { get; set; }
 }
 
-public class Program2
+public class Program3
 {
     public object id { get; set; }
     public object title { get; set; }
@@ -841,7 +906,7 @@ public class Program2
     public object liveScreenshotThumbnailUrl { get; set; }
     public object tsScreenshotThumbnailUrl { get; set; }
     public int providerType { get; set; }
-    public List<object> tags { get; set; }
+    // public List<object> tags { get; set; }
     public string liveCycle { get; set; }
     public int openAt { get; set; }
     public int beginAt { get; set; }
@@ -879,6 +944,7 @@ public class Program2
     public object socialGroupDetail { get; set; }
     public object audienceLimitation { get; set; }
     public WatchRestriction2 watchRestriction { get; set; }
+    public bool premiumAppealEnabled { get; set; }
     public object programProvider { get; set; }
 }
 
@@ -916,18 +982,12 @@ public class PlayerParams
 
 public class WatchInformation
 {
-    public Program2 program { get; set; }
+    public Program3 program { get; set; }
     public PlayerParams playerParams { get; set; }
     public object watchingError { get; set; }
     public object deletedInfo { get; set; }
     public bool isPlayable { get; set; }
     public bool isTimeshiftReserved { get; set; }
-}
-
-public class Redirect2
-{
-    public object permanentRedirectTo { get; set; }
-    public object temporaryRedirectTo { get; set; }
 }
 
 public class Link
@@ -938,14 +998,19 @@ public class Link
 
 public class PortalLinks
 {
-    public List<Link> links { get; set; }
+    // public List<Link> links { get; set; }
+}
+
+public class AppMerit
+{
+    public object appMerit { get; set; }
 }
 
 public class Watch2
 {
     public WatchInformation watchInformation { get; set; }
-    public Redirect2 redirect { get; set; }
     public PortalLinks portalLinks { get; set; }
+    public AppMerit appMerit { get; set; }
 }
 
 public class Submodules15
@@ -975,7 +1040,7 @@ public class Submodules16
 
 public class Onair2
 {
-    public List<object> items { get; set; }
+    //  public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules16 submodules { get; set; }
@@ -998,7 +1063,7 @@ public class Submodules18
 
 public class Past
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules18 submodules { get; set; }
@@ -1021,7 +1086,7 @@ public class Submodules20
 
 public class Reserved
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules20 submodules { get; set; }
@@ -1074,7 +1139,7 @@ public class Submodules23
 
 public class Onair3
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules23 submodules { get; set; }
@@ -1097,7 +1162,7 @@ public class Submodules25
 
 public class Past2
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules25 submodules { get; set; }
@@ -1120,7 +1185,7 @@ public class Submodules27
 
 public class Reserved2
 {
-    public List<object> items { get; set; }
+    // public List<object> items { get; set; }
     public int loadedPages { get; set; }
     public int pageTotal { get; set; }
     public Submodules27 submodules { get; set; }
@@ -1145,7 +1210,7 @@ public class LiveCycle3
 
 public class Submodules30
 {
-    public List<object> singleValue { get; set; }
+    // public List<object> singleValue { get; set; }
 }
 
 public class ProviderTypes
@@ -1155,7 +1220,7 @@ public class ProviderTypes
 
 public class Submodules31
 {
-    public List<string> singleValue { get; set; }
+    // public List<object> singleValue { get; set; }
 }
 
 public class SearchFilters
@@ -1165,7 +1230,7 @@ public class SearchFilters
 
 public class Submodules32
 {
-    public List<string> singleValue { get; set; }
+    // public List<object> singleValue { get; set; }
 }
 
 public class SearchOptions
@@ -1213,7 +1278,7 @@ public class Notification
 
 public class Programs5
 {
-    public List<object> programs { get; set; }
+    //  public List<object> programs { get; set; }
 }
 
 public class Timetable
@@ -1224,8 +1289,8 @@ public class Timetable
 
 public class NicoliveInfo
 {
-    public List<object> infoItems { get; set; }
-    public List<object> maintenanceItems { get; set; }
+    // public List<object> infoItems { get; set; }
+    // public List<object> maintenanceItems { get; set; }
 }
 
 public class NicoInfo
@@ -1235,15 +1300,15 @@ public class NicoInfo
 
 public class RookiePrograms
 {
-    public List<object> programs { get; set; }
+    // public List<object> programs { get; set; }
 }
 
 public class RecommendedPrograms
 {
-    public List<object> programs { get; set; }
+    // public List<object> programs { get; set; }
 }
 
-public class PopularPrograms
+/*public class PopularPrograms
 {
     public List<object> commonCategoryPrograms { get; set; }
     public List<object> tryCategoryPrograms { get; set; }
@@ -1253,16 +1318,21 @@ public class PopularPrograms
     public List<object> reservedFocusedPrograms { get; set; }
     public List<object> reservedPrograms { get; set; }
     public List<object> pastPrograms { get; set; }
-}
+}*/
 
 public class FocusedPrograms
 {
-    public List<object> programs { get; set; }
+    // public List<object> programs { get; set; }
 }
 
 public class FavoritePrograms2
 {
-    public List<object> programs { get; set; }
+    // public List<object> programs { get; set; }
+}
+
+public class FavoritePastPrograms
+{
+    // public List<object> programs { get; set; }
 }
 
 public class Top2
@@ -1270,14 +1340,15 @@ public class Top2
     public NicoInfo nicoInfo { get; set; }
     public RookiePrograms rookiePrograms { get; set; }
     public RecommendedPrograms recommendedPrograms { get; set; }
-    public PopularPrograms popularPrograms { get; set; }
+    // public PopularPrograms popularPrograms { get; set; }
     public FocusedPrograms focusedPrograms { get; set; }
     public FavoritePrograms2 favoritePrograms { get; set; }
+    public FavoritePastPrograms favoritePastPrograms { get; set; }
 }
 
 public class PickupContents2
 {
-    public List<object> pickupItems { get; set; }
+    // public List<object> pickupItems { get; set; }
 }
 
 public class PickupContents
@@ -1287,7 +1358,7 @@ public class PickupContents
 
 public class FeaturedContents2
 {
-    public List<object> featuredItems { get; set; }
+    // public List<object> featuredItems { get; set; }
 }
 
 public class FeaturedContents
@@ -1319,7 +1390,7 @@ public class HeaderParts
 
 public class RankingPrograms
 {
-    public List<object> rankingPrograms { get; set; }
+    // public List<object> rankingPrograms { get; set; }
 }
 
 public class Submodules34
@@ -1338,9 +1409,10 @@ public class Ranking2
     public ProviderType providerType { get; set; }
 }
 
-public class Cookie2
+public class Redirect2
 {
-    public List<object> cookies { get; set; }
+    public object permanentRedirectTo { get; set; }
+    public object temporaryRedirectTo { get; set; }
 }
 
 public class PageContents
@@ -1362,7 +1434,7 @@ public class PageContents
     public HeatMap heatMap { get; set; }
     public HeaderParts headerParts { get; set; }
     public Ranking2 ranking { get; set; }
-    public Cookie2 cookie { get; set; }
+    public Redirect2 redirect { get; set; }
 }
 
 public class EApiClient2
@@ -1432,12 +1504,23 @@ public class Channel3
 {
 }
 
-public class AccountServiceClient
+/*public class AccountServiceClient
 {
-    public List<object> __invalid_name__interceptors { get; set; }
-    public List<object> __invalid_name__interceptor_providers { get; set; }
-    public Channel3 __invalid_name__channel { get; set; }
+    public List<object> __invalid_name__$interceptors { get; set; }
+public List<object> __invalid_name__$interceptor_providers { get; set; }
+    public Channel3 __invalid_name__$channel { get; set; }
+}*/
+
+public class Channel4
+{
 }
+
+/*public class PremiumMasqueradeServiceClient
+{
+    public List<object> __invalid_name__$interceptors { get; set; }
+public List<object> __invalid_name__$interceptor_providers { get; set; }
+    public Channel4 __invalid_name__$channel { get; set; }
+}*/
 
 public class InternalRepr
 {
@@ -1451,8 +1534,9 @@ public class MetaData
 public class ApiClient6
 {
     public int timeoutMs { get; set; }
-    public List<object> interceptors { get; set; }
-    public AccountServiceClient accountServiceClient { get; set; }
+    // public List<object> interceptors { get; set; }
+    //  public AccountServiceClient accountServiceClient { get; set; }
+    //  public PremiumMasqueradeServiceClient premiumMasqueradeServiceClient { get; set; }
     public MetaData metaData { get; set; }
 }
 
@@ -1734,17 +1818,17 @@ public class RankingService
     public EmacsClient5 emacsClient { get; set; }
 }
 
-public class Channel4
+public class Channel5
 {
 }
 
-public class Client
+/*public class Client
 {
-    public List<object> __invalid_name__ { get; set; }
-    public List<object> __invalid_name___ { get; set; }
-    public Channel4 __invalid_name____ { get; set; }
+    public List<object> __invalid_name__$interceptors { get; set; }
+public List<object> __invalid_name__$interceptor_providers { get; set; }
+    public Channel5 __invalid_name__$channel { get; set; }
 }
-
+*/
 public class InternalRepr2
 {
 }
@@ -1757,8 +1841,8 @@ public class MetaData2
 public class ApiClient21
 {
     public int timeoutMs { get; set; }
-    public List<object> interceptors { get; set; }
-    public Client client { get; set; }
+    //public List<object> interceptors { get; set; }
+    //public Client client { get; set; }
     public MetaData2 metaData { get; set; }
 }
 
@@ -1772,15 +1856,15 @@ public class PopularProgramsService
     public DolphinApiClient dolphinApiClient { get; set; }
 }
 
-public class Channel5
+public class Channel6
 {
 }
 
 public class Client2
 {
-    public List<object> __invalid_name__interceptors_ { get; set; }
-    public List<object> __invalid_name__interceptor_providers { get; set; }
-    public Channel5 __invalid_name__channel { get; set; }
+    // public List<object> __invalid_name__$interceptors { get; set; }
+    // public List<object> __invalid_name__$interceptor_providers { get; set; }
+    // public Channel6 __invalid_name__$channel { get; set; }
 }
 
 public class InternalRepr3
@@ -1795,7 +1879,7 @@ public class MetaData3
 public class ApiClient22
 {
     public int timeoutMs { get; set; }
-    public List<object> interceptors { get; set; }
+    // public List<object> interceptors { get; set; }
     public Client2 client { get; set; }
     public MetaData3 metaData { get; set; }
 }

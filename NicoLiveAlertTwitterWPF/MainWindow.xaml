@@ -341,7 +341,7 @@
                         <TextBlock Text="このアプリについて" FontSize="20"/>
                         <StackPanel Margin="10">
                             <TextBlock Text="ニコ生アラート（青鳥WPF）" FontSize="20"/>
-                            <TextBlock x:Name="AppInfoVersionTextBox" Text="1.0 2019/09/16" FontSize="20"/>
+                            <TextBlock x:Name="AppInfoVersionTextBox" Text="1.1 2020/02/05" FontSize="20"/>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="何かあればどうぞ" FontSize="20"/>
