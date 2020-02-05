@@ -851,7 +851,7 @@ public class Program2
     public long beginAt { get; set; }
     public long endAt { get; set; }
     public bool isMemberOnly { get; set; }
-    public Statistics statistics { get; set; }
+   // public Statistics statistics { get; set; }
     public string socialGroupName { get; set; }
     public string socialGroupThumbnailUrl { get; set; }
     public string ownerIconUrl { get; set; }
